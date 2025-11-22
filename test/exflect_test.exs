@@ -44,6 +44,18 @@ defmodule ExflectTest do
     assert(equal?(Exflect.singularize("bus", check: true), "bus"))
   end
 
+  test "exceptions" do
+    assert(Exflect.singular?("child"))
+    refute(Exflect.singular?("children"))
+    assert(Exflect.plural?("children"))
+    refute(Exflect.plural?("child"))
+
+    assert(equal?(Exflect.pluralize("children", check: true), "children"))
+    assert(equal?(Exflect.singularize("children", check: true), "child"))
+    assert(equal?(Exflect.singularize("child", check: true), "child"))
+    assert(equal?(Exflect.pluralize("child", check: true), "children"))
+  end
+
   @tag :benchmark
   test "benchmark" do
     %{

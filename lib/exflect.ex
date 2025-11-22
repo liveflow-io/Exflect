@@ -49,7 +49,7 @@ defmodule Exflect do
     match_style = Keyword.get(opts, :match_style, false)
 
     cond do
-      check && Exflect.Detect.singular?(text) -> text
+      check && (Exflect.Shared.uncountable?(text) || Exflect.Detect.singular?(text)) -> text
       true -> unchecked_singularize(text, match_style)
     end
   end
@@ -104,7 +104,7 @@ defmodule Exflect do
     match_style = Keyword.get(opts, :match_style, false)
 
     cond do
-      check && Exflect.Detect.plural?(text) -> text
+      check && (Exflect.Shared.uncountable?(text) || Exflect.Detect.plural?(text)) -> text
       true -> unchecked_pluralize(text, match_style)
     end
   end
