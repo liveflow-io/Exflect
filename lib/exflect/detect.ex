@@ -64,6 +64,23 @@ defmodule Exflect.Detect do
     ~r/[^aouie]s$/
   ]
 
-  def singular?(word), do: Enum.any?(@sg, &Regex.match?(&1, word)) || !plural?(word)
-  def plural?(word), do: Enum.any?(@pl, &Regex.match?(&1, word))
+  @singular_exceptions Exflect.Shared.exceptions(:singularize)
+  @plural_exceptions Exflect.Shared.exceptions(:pluralize)
+
+  for {word, _} <- @plural_exceptions do
+    def singular?(unquote(word)), do: true
+  end
+
+  def singular?(word) do
+    Enum.any?(@sg, &Regex.match?(&1, word)) ||
+      !plural?(word)
+  end
+
+  for {word, _} <- @singular_exceptions do
+    def plural?(unquote(word)), do: true
+  end
+
+  def plural?(word) do
+    Enum.any?(@pl, &Regex.match?(&1, word))
+  end
 end
